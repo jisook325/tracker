@@ -22,7 +22,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ date
     method: "PUT",
     headers: new Headers({
       "content-type": "application/json",
-      ...buildAuthHeaders(auth.session!),
+      ...(buildAuthHeaders(auth.session!) as Record<string, string>),
     }),
     body,
   });
