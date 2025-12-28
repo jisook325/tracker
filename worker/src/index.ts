@@ -1,3 +1,4 @@
+/// <reference types="@cloudflare/workers-types" />
 import { drizzle } from "drizzle-orm/d1";
 import { and, asc, eq, gte, lte } from "drizzle-orm";
 import { dayEntries, sleepEvents, users } from "../db/schema";
