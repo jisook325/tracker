@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/authOptions";
 import { buildWorkerAuthHeaders } from "../../../lib/workerAuth";
 
 const WORKER_BASE_URL =
