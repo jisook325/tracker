@@ -6,6 +6,7 @@ import { authOptions } from "../../lib/authOptions";
 import { CellState, DaySummary } from "../../lib/workerApi";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");

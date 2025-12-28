@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { buildAuthHeaders, forwardToWorker, requireSession } from "../../_utils";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ date: string }> }) {
   const resolved = await params;

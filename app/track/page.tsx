@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import TrackClient from "./track-client";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default function TrackPage() {
   return (

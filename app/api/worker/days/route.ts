@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { buildAuthHeaders, forwardToWorker, requireSession } from "../_utils";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   const auth = await requireSession();
