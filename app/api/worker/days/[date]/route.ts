@@ -18,13 +18,13 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ date
   }
 
   const body = await req.text();
+  const headers = new Headers();
+  headers.set("content-type", "application/json");
   const authHeaders = buildAuthHeaders(auth.session!) as Record<string, string>;
+  Object.entries(authHeaders).forEach(([key, value]) => headers.set(key, value));
   return forwardToWorker(`/days/${date}`, {
     method: "PUT",
-    headers: new Headers({
-      "content-type": "application/json",
-      ...authHeaders,
-    }),
+    headers,
     body,
   });
 }
