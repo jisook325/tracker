@@ -8,12 +8,13 @@ export async function POST(req: NextRequest) {
   if (auth.response) return auth.response;
 
   const body = await req.text();
+  const headers = new Headers();
+  headers.set("content-type", "application/json");
+  const authHeaders = buildAuthHeaders(auth.session!) as Record<string, string>;
+  Object.entries(authHeaders).forEach(([key, value]) => headers.set(key, value));
   return forwardToWorker(`/sleep-events`, {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...buildAuthHeaders(auth.session!),
-    },
+    headers,
     body,
   });
 }
