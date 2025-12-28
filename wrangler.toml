@@ -1,4 +1,4 @@
-name = "tracker"
+name = "daily-life-tracker-worker"
 main = "worker/src/index.ts"
 compatibility_date = "2024-12-28"
 compatibility_flags = ["nodejs_compat"]
@@ -9,7 +9,3 @@ database_name = "daily-life-tracker-db"
 # TODO: set your real D1 database ID from Cloudflare dashboard
 database_id = "0660eee2-92ef-4105-a5f9-86cd500afe8e"
 migrations_dir = "worker/db/migrations"
-
-[vars]
-# TODO: set a real secret and also add WORKER_SECRET to .env.local
-WORKER_SECRET = "dev-secret"

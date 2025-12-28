@@ -18,11 +18,12 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ date
   }
 
   const body = await req.text();
+  const authHeaders = buildAuthHeaders(auth.session!) as Record<string, string>;
   return forwardToWorker(`/days/${date}`, {
     method: "PUT",
     headers: new Headers({
       "content-type": "application/json",
-      ...(buildAuthHeaders(auth.session!) as Record<string, string>),
+      ...authHeaders,
     }),
     body,
   });
