@@ -1,5 +1,6 @@
 /// <reference types="@cloudflare/workers-types" />
 import { drizzle } from "drizzle-orm/d1";
+import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { and, asc, eq, gte, lte } from "drizzle-orm";
 import { dayEntries, sleepEvents, users } from "../db/schema";
 import { analyzeSleepEvents } from "./sleep";
@@ -11,6 +12,8 @@ type Env = {
 };
 
 const schema = { dayEntries, sleepEvents, users };
+type Schema = typeof schema;
+type Db = DrizzleD1Database<Schema>;
 
 const json = (body: unknown, init?: ResponseInit) =>
   new Response(JSON.stringify(body), {
@@ -51,7 +54,7 @@ function defaultRange() {
   return { from: toDateKey(from), to: toDateKey(to) };
 }
 
-async function ensureUser(db: ReturnType<typeof drizzle>, googleUserId: string, email?: string) {
+async function ensureUser(db: Db, googleUserId: string, email?: string) {
   const existing = await db.query.users.findFirst({
     where: eq(users.googleUserId, googleUserId),
   });
