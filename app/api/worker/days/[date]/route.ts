@@ -3,7 +3,8 @@ import { buildAuthHeaders, forwardToWorker, requireSession } from "../../_utils"
 
 export const runtime = "edge";
 
-export async function PUT(req: NextRequest, { params }: { params: { date: string } }) {
+export async function PUT(req: NextRequest, context: any) {
+  const params = context?.params as { date?: string } | undefined;
   const auth = await requireSession();
   if (auth.response) return auth.response;
 
