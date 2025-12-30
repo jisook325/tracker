@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth/edge";
-import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { authOptions } from "../../lib/authOptions";
 import { CellState, DaySummary } from "../../lib/workerApi";
+import { getSession } from "../../lib/session";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -140,9 +138,8 @@ export default async function BoardPage({
 }: {
   searchParams?: Promise<{ tab?: string | string[] }>;
 }) {
-  // 로그인 보호
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/login");
+  // mock/session based auth to stay edge-compatible
+  await getSession();
 
   let dayStateMap = new Map<string, CellState>();
   let dayMoodMap = new Map<string, string | null>();

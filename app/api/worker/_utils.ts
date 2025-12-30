@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/edge";
-import { authOptions } from "../../../lib/authOptions";
 import { buildWorkerAuthHeaders } from "../../../lib/workerAuth";
+import { getSession } from "../../../lib/session";
 
 const WORKER_BASE_URL =
   process.env.WORKER_BASE_URL ||
@@ -9,8 +8,8 @@ const WORKER_BASE_URL =
   "http://127.0.0.1:8787";
 
 export async function requireSession() {
-  const session = await getServerSession(authOptions);
-  const userId = (session?.user as any)?.id;
+  const session = await getSession();
+  const userId = session?.user?.id;
   if (!session || !userId) {
     return { session: null, response: NextResponse.json({ error: "unauthorized" }, { status: 401 }) };
   }
@@ -44,8 +43,8 @@ export async function forwardToWorker(path: string, init?: RequestInit) {
   }
 }
 
-export async function buildAuthHeaders(session: NonNullable<Awaited<ReturnType<typeof getServerSession>>>) {
-  const user = (session as any)?.user as { id?: string; email?: string } | undefined;
+export async function buildAuthHeaders(session: Awaited<ReturnType<typeof getSession>>) {
+  const user = session?.user as { id?: string; email?: string } | undefined;
   const userId = user?.id || user?.email || "local-user";
   return buildWorkerAuthHeaders(userId, user?.email);
 }
