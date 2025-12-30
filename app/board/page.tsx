@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/edge";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { authOptions } from "../../lib/authOptions";

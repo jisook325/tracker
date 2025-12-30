@@ -3,13 +3,12 @@ import { buildAuthHeaders, forwardToWorker, requireSession } from "../../_utils"
 
 export const runtime = "edge";
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ date: string }> }) {
-  const resolved = await params;
+export async function PUT(req: NextRequest, { params }: { params: { date: string } }) {
   const auth = await requireSession();
   if (auth.response) return auth.response;
 
   const pathDate = req.nextUrl.pathname.split("/").pop();
-  const date = resolved?.date || pathDate;
+  const date = params?.date || pathDate;
   if (!date) {
     return new Response(JSON.stringify({ error: "missing date", path: req.nextUrl.pathname }), { status: 400 });
   }
@@ -20,7 +19,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ date
   const body = await req.text();
   const headers = new Headers();
   headers.set("content-type", "application/json");
-  const authHeaders = buildAuthHeaders(auth.session!) as Record<string, string>;
+  const authHeaders = await buildAuthHeaders(auth.session!);
   Object.entries(authHeaders).forEach(([key, value]) => headers.set(key, value));
   return forwardToWorker(`/days/${date}`, {
     method: "PUT",

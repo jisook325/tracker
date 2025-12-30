@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   const search = req.nextUrl.search;
   const headers = new Headers();
-  const authHeaders = buildAuthHeaders(auth.session!) as Record<string, string>;
+  const authHeaders = await buildAuthHeaders(auth.session!);
   Object.entries(authHeaders).forEach(([key, value]) => headers.set(key, value));
   return forwardToWorker(`/days${search}`, {
     method: "GET",

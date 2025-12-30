@@ -1,8 +1,12 @@
-import crypto from "crypto";
-
 const WORKER_SECRET = process.env.WORKER_SECRET;
 
-export function buildWorkerAuthHeaders(userId: string, email?: string | null) {
+function toHex(buffer: ArrayBuffer) {
+  return Array.from(new Uint8Array(buffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export async function buildWorkerAuthHeaders(userId: string, email?: string | null) {
   if (!WORKER_SECRET) {
     return {
       "x-mock-user": userId,
@@ -12,7 +16,11 @@ export function buildWorkerAuthHeaders(userId: string, email?: string | null) {
 
   const ts = Date.now().toString();
   const payload = `${userId}|${email ?? ""}|${ts}`;
-  const sig = crypto.createHmac("sha256", WORKER_SECRET).update(payload).digest("hex");
+
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", encoder.encode(WORKER_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sigBuf = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
+  const sig = toHex(sigBuf);
 
   return {
     "x-user-id": userId,

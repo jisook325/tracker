@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/edge";
 import { authOptions } from "../../../lib/authOptions";
 import { buildWorkerAuthHeaders } from "../../../lib/workerAuth";
 
@@ -44,7 +44,7 @@ export async function forwardToWorker(path: string, init?: RequestInit) {
   }
 }
 
-export function buildAuthHeaders(session: NonNullable<Awaited<ReturnType<typeof getServerSession>>>) {
+export async function buildAuthHeaders(session: NonNullable<Awaited<ReturnType<typeof getServerSession>>>) {
   const user = (session as any)?.user as { id?: string; email?: string } | undefined;
   const userId = user?.id || user?.email || "local-user";
   return buildWorkerAuthHeaders(userId, user?.email);
