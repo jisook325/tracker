@@ -3,12 +3,8 @@ main = "worker/src/index.ts"
 compatibility_date = "2024-12-28"
 compatibility_flags = ["nodejs_compat"]
 
-# Pages build output (for next-on-pages)
-pages_build_output_dir = ".vercel/output/static"
-
 [[d1_databases]]
 binding = "DB"
 database_name = "daily-life-tracker-db"
-# TODO: set your real D1 database ID from Cloudflare dashboard
 database_id = "0660eee2-92ef-4105-a5f9-86cd500afe8e"
 migrations_dir = "worker/db/migrations"
